@@ -44,13 +44,27 @@ Thêm phần tử vào mảng JSON của môn tương ứng. Mỗi câu phải c
 
 ## Cách học và lưu tiến độ
 
-- Chọn số câu hoặc học tất cả. Câu chưa học được ưu tiên; nếu thiếu, bổ sung câu đã học, không trùng câu trong phiên.
+- Chọn **Học theo số câu** để mở bộ chọn Cơ bản, Trung bình, Nâng cao bên dưới; số câu và tiến độ cập nhật theo mức đã chọn. Khi đổi mức, số câu được giảm về giới hạn hợp lệ nếu cần. **Học tất cả** ẩn bộ chọn mức và lấy toàn bộ câu hỏi ở cả ba mức. Câu chưa học được ưu tiên; nếu thiếu, bổ sung câu đã học, không trùng câu trong phiên.
 - Phím **1–4** chọn đáp án; **Enter** chuyển câu sau khi trả lời. Có thể tạm dừng hoặc quay lại mà không mất phiên.
 - Câu sai tạo thẻ ôn tập riêng cho mỗi môn. Nhấn thẻ hoặc **Space** để lật; **← / →** đổi thẻ. “Mình đã nhớ!” gỡ câu khỏi bộ thẻ; “Ôn lại sau” giữ câu để học tiếp.
 - Chỉ có một phiên đang học tại một thời điểm. Khi thay thế phiên dở, ứng dụng yêu cầu xác nhận; câu đã khám phá và bộ thẻ vẫn được giữ.
 - Tất cả dữ liệu được ghi ngay dưới một khóa `quiz_practice_v1` trong localStorage. Khóa được giữ theo schema của yêu cầu. `answeredIds` bổ sung để ưu tiên câu chưa học và `reviewFlipped` lưu mặt hiện tại của thẻ. Thống kê cộng một lần khi hoàn thành phiên.
 - Khi mở lại, màn hình môn học hiển thị banner tiếp tục phiên dở. Mở bộ ôn tập để trở về đúng vị trí và mặt thẻ đã lưu.
 - Dữ liệu thuộc trình duyệt và địa chỉ đang mở; xóa dữ liệu trình duyệt sẽ xóa tiến độ. Nếu trình duyệt chặn lưu trữ hoặc hết dung lượng, ứng dụng hiển thị thông báo.
+
+## Xóa tạm và hiện lại card
+
+- Biểu tượng thùng rác **Xóa** ở góc phải card môn học ẩn môn khỏi danh sách. Biểu tượng **Xóa** ở góc phải thẻ trong bộ ôn tập ẩn riêng thẻ đó, không đánh dấu đã nhớ và không xóa câu hỏi khỏi ngân hàng.
+- Trạng thái ẩn được lưu bằng localStorage trên trình duyệt hiện tại, không dùng database. Tải lại trang vẫn giữ trạng thái; nội dung, tiến độ và phiên đang học được giữ nguyên.
+- Muốn hiện lại tất cả card đã ẩn, tăng `CARD_VISIBILITY_VERSION` trong `src/data/cardVisibility.js` (ví dụ từ `2` thành `3`) rồi build và triển khai lại. Không cần xóa dữ liệu tiến độ.
+
+## Xem và chỉnh sửa câu hỏi
+
+- Trên card môn, chọn **Xem câu hỏi & đáp án** để xem nội dung, 4 lựa chọn, đáp án đúng và giải thích. Có tìm kiếm và phân trang.
+- **Chỉnh sửa** hoặc **Thêm câu hỏi** mở biểu mẫu sửa nội dung, chủ đề, mức độ, các lựa chọn, đáp án đúng và giải thích. Chọn **Lưu vào bản nháp**, sau đó **Cập nhật** để áp dụng. Biểu tượng **Xóa** ở góc phải card câu hỏi chỉ xóa trong bản nháp cho đến khi cập nhật.
+- **Cập nhật** tải toàn bộ mảng câu hỏi theo schema gốc thành `mds_question_edited.json`, đồng thời lưu bản đã sửa trong localStorage (`quiz_edited_banks_v1`). File gốc không bị ghi đè; không có database hay tài khoản.
+- Chỉ trình duyệt đã cập nhật mới có lựa chọn **JSON có sẵn / JSON đã chỉnh sửa** trong màn hình câu hỏi. Lựa chọn được lưu và áp dụng cho các phiên học mới cùng bộ ôn tập. Phiên học đang dở giữ bản câu hỏi lúc bắt đầu.
+- Bản sửa thuộc trình duyệt và địa chỉ hiện tại. Trình duyệt khác không thấy bản sửa; xóa dữ liệu trình duyệt sẽ mất bản lưu, vì vậy hãy giữ file JSON đã tải.
 
 ## Thiết kế
 
