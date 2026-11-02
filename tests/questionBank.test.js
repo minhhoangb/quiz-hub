@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { editedFilename, getEditedBank, questionsForDifficulty, validateQuestions } from '../src/lib/questionBank.js';
 import { createSession } from '../src/lib/session.js';
 
-const original = JSON.parse(fs.readFileSync(new URL('../src/data/questions/mds_question.json', import.meta.url)));
+const original = JSON.parse(fs.readFileSync(new URL('../src/data/questions/mds_questions.json', import.meta.url)));
 
 test('difficulty selection gives exact totals and sessions never include another difficulty', () => {
   const copy = JSON.stringify(original);
@@ -33,13 +33,13 @@ test('edited banks retain the original JSON schema and do not mutate the origina
   edited[0].options[2] = 'Đáp án tiếng Việt';
   edited[0].correctAnswer = 2;
   edited.splice(1, 1);
-  edited.push({ ...structuredClone(edited[0]), id: 251, question: 'Câu hỏi mới?' });
+  edited.push({ ...structuredClone(edited[0]), id: Math.max(...original.map(q => q.id)) + 1, question: 'Câu hỏi mới?' });
   assert.equal(validateQuestions(edited), '');
   assert.notEqual(original[0].question, edited[0].question);
   assert.deepEqual(Object.keys(edited[0]), Object.keys(original[0]));
   assert.deepEqual(JSON.parse(JSON.stringify(edited)), edited);
-  assert.equal(editedFilename('mds_question'), 'mds_question_edited.json');
-  assert.equal(editedFilename('mds_question.json'), 'mds_question_edited.json');
+  assert.equal(editedFilename('mds_questions'), 'mds_questions_edited.json');
+  assert.equal(editedFilename('mds_questions.json'), 'mds_questions_edited.json');
 });
 
 test('studying all questions includes the entire bank across all three difficulties', () => {

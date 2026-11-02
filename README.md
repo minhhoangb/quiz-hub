@@ -40,7 +40,7 @@ Thêm phần tử vào mảng JSON của môn tương ứng. Mỗi câu phải c
 }
 ```
 
-`correctAnswer` bắt đầu từ **0**: A = 0, B = 1, C = 2, D = 3. Giữ nguyên ID câu hỏi đã dùng để tiến độ cũ vẫn khớp. Ứng dụng hiện chỉ có môn MDS301, với ngân hàng câu hỏi tại `src/data/questions/mds_question.json`. ID môn vẫn là `mds` để giữ tiến độ đã lưu.
+`correctAnswer` bắt đầu từ **0**: A = 0, B = 1, C = 2, D = 3. Giữ nguyên ID câu hỏi đã dùng để tiến độ cũ vẫn khớp. Ứng dụng hiện chỉ có môn MDS301, với ngân hàng câu hỏi tại `src/data/questions/mds_questions.json`. ID môn vẫn là `mds` để giữ tiến độ đã lưu.
 
 ## Cách học và lưu tiến độ
 
@@ -62,7 +62,7 @@ Thêm phần tử vào mảng JSON của môn tương ứng. Mỗi câu phải c
 
 - Trên card môn, chọn **Xem câu hỏi & đáp án** để xem nội dung, 4 lựa chọn, đáp án đúng và giải thích. Có tìm kiếm và phân trang.
 - **Chỉnh sửa** hoặc **Thêm câu hỏi** mở biểu mẫu sửa nội dung, chủ đề, mức độ, các lựa chọn, đáp án đúng và giải thích. Chọn **Lưu vào bản nháp**, sau đó **Cập nhật** để áp dụng. Biểu tượng **Xóa** ở góc phải card câu hỏi chỉ xóa trong bản nháp cho đến khi cập nhật.
-- **Cập nhật** tải toàn bộ mảng câu hỏi theo schema gốc thành `mds_question_edited.json`, đồng thời lưu bản đã sửa trong localStorage (`quiz_edited_banks_v1`). File gốc không bị ghi đè; không có database hay tài khoản.
+- **Cập nhật** tải toàn bộ mảng câu hỏi theo schema gốc thành `mds_questions_edited.json`, đồng thời lưu bản đã sửa trong localStorage (`quiz_edited_banks_v1`). File gốc không bị ghi đè; không có database hay tài khoản.
 - Chỉ trình duyệt đã cập nhật mới có lựa chọn **JSON có sẵn / JSON đã chỉnh sửa** trong màn hình câu hỏi. Lựa chọn được lưu và áp dụng cho các phiên học mới cùng bộ ôn tập. Phiên học đang dở giữ bản câu hỏi lúc bắt đầu.
 - Bản sửa thuộc trình duyệt và địa chỉ hiện tại. Trình duyệt khác không thấy bản sửa; xóa dữ liệu trình duyệt sẽ mất bản lưu, vì vậy hãy giữ file JSON đã tải.
 

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { mathTextLabel, parseMathText } from '../src/lib/mathText.js';
 
-const bank = JSON.parse(fs.readFileSync(new URL('../src/data/questions/mds_question.json', import.meta.url)));
+const bank = JSON.parse(fs.readFileSync(new URL('../src/data/questions/mds_questions.json', import.meta.url)));
 
 test('renders the norm question as vector and mathematical formulas without changing source data', () => {
   const original = JSON.stringify(bank[0]);
