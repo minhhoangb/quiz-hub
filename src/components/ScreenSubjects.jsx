@@ -1,0 +1,37 @@
+import { ArrowRight, BookOpen, Brain, CheckCheck, CircleHelp, Globe2, Layers, Play, Sparkles, Target, Trophy } from 'lucide-react';
+import { Progress, StudyArt } from './UI.jsx';
+
+export default function ScreenSubjects({ subjects, banks, state, onSetup, onResume, onReview, view }) {
+  const answered = subjects.reduce((sum, subject) => sum + (state.answeredIds[subject.id]?.length ?? 0), 0);
+  const wrongCount = subjects.reduce((sum, subject) => sum + (state.wrong[subject.id]?.length ?? 0), 0);
+  const stats = subjects.map(subject => state.stats[subject.id]).filter(Boolean);
+  const done = stats.reduce((sum, item) => sum + item.sessionsDone, 0);
+  const totalAnswered = stats.reduce((sum, item) => sum + item.totalAnswered, 0);
+  const totalCorrect = stats.reduce((sum, item) => sum + item.totalCorrect, 0);
+  const total = subjects.reduce((sum, subject) => sum + banks[subject.id].length, 0);
+  const active = state.session?.status === 'active' ? state.session : null;
+  const activeSubject = subjects.find(subject => subject.id === active?.subjectId);
+  const reviewOnly = view === 'review';
+  return <div className="animate-fade-in">
+    {activeSubject && <div className="resume-banner"><span className="resume-icon"><Play size={17} fill="currentColor" /></span><div><strong>Bạn có một phiên học chưa hoàn thành</strong><p>{activeSubject.name} · Đã trả lời {active.answers.length}/{active.totalPlanned} câu</p></div><button onClick={onResume}>Tiếp tục học<ArrowRight size={16} /></button></div>}
+    <section className="page-heading"><div><div className="eyebrow"><span />KHÔNG GIAN HỌC TẬP CỦA BẠN</div><h1>{view === 'stats' ? 'Nhìn lại hành trình của bạn' : reviewOnly ? 'Nhớ chắc hơn, từng thẻ một.' : 'Mỗi ngày, giỏi hơn một chút.'}</h1><p>{view === 'stats' ? 'Mỗi câu trả lời là một bước tiến. Cùng xem bạn đã đi được bao xa.' : reviewOnly ? 'Biến những câu từng làm sai thành kiến thức bạn thực sự ghi nhớ.' : 'Chọn một môn học, giữ nhịp luyện tập và chinh phục kiến thức.'}</p></div><span className="heading-note"><Sparkles size={16} />Học theo nhịp của bạn</span></section>
+    {view !== 'stats' && <section className="hero-panel"><div className="hero-copy"><span className="hero-pill"><span />MỘT CHÚT TẬP TRUNG, MỘT BƯỚC TIẾN</span><h2>Kiến thức lớn.<br />Bắt đầu từ <span>câu hỏi nhỏ.</span></h2><p>Không cần học hết trong một ngày. Luyện tập vừa sức,<br className="desktop-break" /> hiểu từng đáp án và để Quiz Hub nhớ tiến độ giúp bạn.</p><a className="button primary" href="#subjects">Khám phá môn học<ArrowRight size={17} /></a><div className="hero-foot"><CheckCheck size={16} /> Tự động lưu <span>·</span> Không áp lực thời gian</div></div><StudyArt /></section>}
+    <section className="stat-grid" aria-label="Tổng quan học tập">
+      <div className="stat-item"><span className="stat-icon"><BookOpen size={21} /></span><div><span>Môn học sẵn sàng</span><strong>{subjects.length.toString().padStart(2, '0')}<small>môn học</small></strong></div></div>
+      <div className="stat-item"><span className="stat-icon"><CheckCheck size={21} /></span><div><span>Câu hỏi đã khám phá</span><strong>{answered.toString().padStart(2, '0')}<small>/ {total} câu hỏi</small></strong></div></div>
+      <div className="stat-item"><span className="stat-icon amber"><Layers size={21} /></span><div><span>Cần ôn tập thêm</span><strong>{wrongCount.toString().padStart(2, '0')}<small>câu hỏi</small></strong></div></div>
+    </section>
+    <section id="subjects" className="subjects-section"><div className="section-heading"><div><h2>{view === 'stats' ? 'Kết quả theo môn học' : reviewOnly ? 'Bộ thẻ ôn tập của bạn' : 'Hôm nay bạn muốn học gì?'}</h2><p>{view === 'stats' ? `${done} phiên hoàn thành · ${totalAnswered ? Math.round(totalCorrect / totalAnswered * 100) : 0}% trả lời đúng trong các phiên đã hoàn thành` : reviewOnly ? 'Chọn một bộ thẻ để ôn lại những câu trả lời sai.' : 'Một phiên học nhỏ, thêm một điều mới.'}</p></div><span className="count-tag">{subjects.length} môn học</span></div>
+    <div className="subject-grid">{subjects.map((subject, index) => {
+      const bank = banks[subject.id];
+      const learned = (state.answeredIds[subject.id] ?? []).filter(id => bank.some(q => q.id === id)).length;
+      const wrong = (state.wrong[subject.id] ?? []).filter(id => bank.some(q => q.id === id)).length;
+      const session = active?.subjectId === subject.id ? active : null;
+      const subjectStats = state.stats[subject.id];
+      const SubjectIcon = index === 0 ? Brain : Globe2;
+      return <article className={`subject-card animate-slide-up subject-${index % 2}`} key={subject.id} style={{ animationDelay: `${index * 70}ms` }}><div className="subject-card-top"><span className="subject-icon"><SubjectIcon size={29} strokeWidth={1.6} /></span><span className="subject-category">{index === 0 ? 'TRÍ TUỆ NHÂN TẠO' : index === 1 ? 'CÔNG NGHỆ THÔNG TIN' : 'KIẾN THỨC & THỰC HÀNH'}</span><span className="subject-number">{String(index + 1).padStart(2, '0')}</span></div><h3>{subject.name}</h3><p className="subject-description">{index === 0 ? 'Từ thuật toán cơ bản đến cách mô hình học từ dữ liệu.' : index === 1 ? 'Hiểu cách thế giới kết nối, từ giao thức đến định tuyến.' : 'Củng cố kiến thức qua từng câu hỏi thực hành.'}</p><div className="subject-meta"><span><CircleHelp size={14} />{bank.length} câu hỏi</span><span className="meta-dot">·</span><span>3 mức độ</span></div><div className="subject-progress"><div><span>Tiến độ khám phá</span><strong>{learned}/{bank.length}</strong></div><Progress value={bank.length ? learned / bank.length * 100 : 0} label={`Tiến độ ${subject.name}`} /></div><div className="subject-bottom"><span>{bank.length - learned} câu chưa học</span>{wrong > 0 ? <button className="wrong-badge" onClick={() => onReview(subject.id)}><Layers size={13} />{wrong} câu cần ôn<ArrowRight size={12} /></button> : <span className="no-wrong"><CheckCheck size={14} />Chưa có câu sai</span>}</div>{view === 'stats' && <div className="subject-result">{subjectStats?.sessionsDone ?? 0} phiên hoàn thành · {subjectStats?.totalCorrect ?? 0}/{subjectStats?.totalAnswered ?? 0} câu đúng</div>}{session && <div className="mini-session"><Play size={13} />Phiên đang học: {session.answers.length}/{session.totalPlanned} câu<Progress value={session.answers.length / session.totalPlanned * 100} label="Tiến độ phiên đang học" /></div>}<div className="subject-actions">{reviewOnly ? <button className="button primary" onClick={() => onReview(subject.id)}>Ôn tập thẻ ghi nhớ<Layers size={16} /></button> : <><button className="button primary" disabled={!bank.length} onClick={session ? onResume : () => onSetup(subject.id)}>{session ? 'Tiếp tục học' : 'Bắt đầu học'}<ArrowRight size={17} /></button>{session && <button className="text-button" onClick={() => onSetup(subject.id)}>Phiên mới</button>}</>}</div></article>;
+    })}</div></section>
+    <aside className="study-tip"><span className="tip-icon"><Target size={23} /></span><div><strong>Đều đặn quan trọng hơn hoàn hảo.</strong><p>Chỉ 5 câu hỏi mỗi ngày cũng là một khởi đầu tốt. Câu nào chưa nhớ? Đã có thẻ ôn tập giúp bạn.</p></div><span className="tip-flower" aria-hidden="true">✳</span></aside>
+    {view === 'stats' && <div className="completion-note"><Trophy size={20} />{done ? `Bạn đã hoàn thành ${done} phiên học. Tiếp tục giữ nhịp nhé!` : 'Hành trình bắt đầu từ phiên học đầu tiên của bạn.'}</div>}
+  </div>;
+}
