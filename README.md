@@ -40,7 +40,7 @@ Thêm phần tử vào mảng JSON của môn tương ứng. Mỗi câu phải c
 }
 ```
 
-`correctAnswer` bắt đầu từ **0**: A = 0, B = 1, C = 2, D = 3. Giữ nguyên ID câu hỏi đã dùng để tiến độ cũ vẫn khớp. Ứng dụng hiện chỉ có môn MDS301, với ngân hàng câu hỏi tại `src/data/questions/mds_questions.json`. ID môn vẫn là `mds` để giữ tiến độ đã lưu.
+`correctAnswer` bắt đầu từ **0**: A = 0, B = 1, C = 2, D = 3. Giữ nguyên ID câu hỏi đã dùng để tiến độ cũ vẫn khớp. Ứng dụng có MDS301 (`src/data/questions/mds_questions.json`) và DHV301 (`src/data/questions/dhv_questions.json`), mỗi môn 500 câu. ID môn lần lượt là `mds` và `dhv`; tiến độ và bộ ôn tập được lưu riêng theo môn.
 
 ## Cách học và lưu tiến độ
 
