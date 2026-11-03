@@ -130,6 +130,7 @@ h1 { font-size: clamp(25px, 2.3vw, 34px); line-height: 1.32; letter-spacing: -1.
 .stat-icon.amber { background: var(--amber-light); color: var(--amber); }
 .stat-item div > span { color: var(--muted); font-size: 10px; display: block; }
 .stat-item strong { font-size: 25px; letter-spacing: -.5px; font-weight: 650; display: block; margin-top: 2px; }
+.stat-item strong.stat-fraction { font-size: clamp(16px, 2vw, 25px); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .stat-item small { font-size: 10px; font-weight: 400; margin-left: 8px; color: var(--muted); letter-spacing: 0; }
 .section-heading { display: flex; justify-content: space-between; align-items: center; margin: 30px 0 17px; gap: 10px; }
 .section-heading h2 { font-size: 19px; font-weight: 650; letter-spacing: -.45px; }
@@ -157,8 +158,6 @@ h1 { font-size: clamp(25px, 2.3vw, 34px); line-height: 1.32; letter-spacing: -1.
 .wrong-badge:hover { outline: 1px solid var(--amber); }
 .subject-actions { display: flex; gap: 15px; align-items: center; margin-top: 18px; }
 .subject-actions > .button { flex: 1; font-size: 11px; justify-content: space-between; min-height: 38px; padding: 10px 13px; }
-.subject-1 .subject-actions > .button { background: var(--surface); color: var(--green); border-color: var(--border); box-shadow: none; }
-.subject-1 .subject-actions > .button:hover { background: var(--green-light); color: var(--green-dark); border-color: var(--green); }
 .text-button { border: 0; background: none; color: var(--green); font-size: 11px; padding: 9px 0; font-weight: 600; }
 .text-button:hover { text-decoration: underline; }
 .study-tip { display: flex; align-items: center; gap: 16px; padding: 19px 22px; border: 1px dashed var(--art-green); border-radius: 11px; background: var(--subtle); margin-top: 23px; }
@@ -289,6 +288,7 @@ kbd { display: inline-flex; align-items: center; justify-content: center; font-f
 .summary-actions > .text-button { width: 100%; text-align: center; }
 .review-counter { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
 .review-counter strong { color: var(--ink); }
+.review-wrong-count { background: var(--amber-light); color: var(--amber); }
 .flashcard { display: block; width: 100%; min-height: 355px; perspective: 1400px; border: 0; background: transparent; padding: 0; margin-top: 22px; text-align: center; }
 .flashcard-inner { display: grid; transform-style: preserve-3d; transition: transform 550ms cubic-bezier(.2,.7,.25,1); min-height: 355px; }
 .flashcard.is-flipped .flashcard-inner { transform: rotateY(180deg); }

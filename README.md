@@ -47,6 +47,7 @@ Thêm phần tử vào mảng JSON của môn tương ứng. Mỗi câu phải c
 - Chọn **Học theo số câu** để mở bộ chọn Cơ bản, Trung bình, Nâng cao bên dưới; số câu và tiến độ cập nhật theo mức đã chọn. Khi đổi mức, số câu được giảm về giới hạn hợp lệ nếu cần. **Học tất cả** ẩn bộ chọn mức và lấy toàn bộ câu hỏi ở cả ba mức. Câu chưa học được ưu tiên; nếu thiếu, bổ sung câu đã học, không trùng câu trong phiên.
 - Phím **1–4** chọn đáp án; **Enter** chuyển câu sau khi trả lời. Có thể tạm dừng hoặc quay lại mà không mất phiên.
 - Câu sai tạo thẻ ôn tập riêng cho mỗi môn. Nhấn thẻ hoặc **Space** để lật; **← / →** đổi thẻ. “Mình đã nhớ!” gỡ câu khỏi bộ thẻ; “Ôn lại sau” giữ câu để học tiếp.
+- Mỗi lần trả lời sai tăng bộ đếm riêng của câu hỏi trong môn đó. Số lần sai chỉ hiển thị trong **Ôn tập câu sai**, lưu trong localStorage và vẫn giữ sau khi gỡ hoặc ẩn thẻ. Câu sai từ dữ liệu cũ bắt đầu ở 1 lần vì trước đây chưa lưu lịch sử đếm.
 - Chỉ có một phiên đang học tại một thời điểm. Khi thay thế phiên dở, ứng dụng yêu cầu xác nhận; câu đã khám phá và bộ thẻ vẫn được giữ.
 - Tất cả dữ liệu được ghi ngay dưới một khóa `quiz_practice_v1` trong localStorage. Khóa được giữ theo schema của yêu cầu. `answeredIds` bổ sung để ưu tiên câu chưa học và `reviewFlipped` lưu mặt hiện tại của thẻ. Thống kê cộng một lần khi hoàn thành phiên.
 - Khi mở lại, màn hình môn học hiển thị banner tiếp tục phiên dở. Mở bộ ôn tập để trở về đúng vị trí và mặt thẻ đã lưu.
@@ -70,4 +71,4 @@ Thêm phần tử vào mảng JSON của môn tương ứng. Mỗi câu phải c
 
 Phong cách góc học tập nhẹ nhàng: nền ngà, xanh lá trầm, minh họa thẻ học và nhịp khoảng cách 8px. Font hệ thống hiển thị tiếng Việt ngay, không tải font ngoài. Animation CSS ngắn; hỗ trợ giảm chuyển động, thao tác bàn phím và bố cục di động.
 
-Cấu hình Tailwind sử dụng [PostCSS](https://tailwindcss.com/docs/installation/using-postcss) và nạp animation từ `tailwind.config.js` qua `@config` theo [tài liệu chính thức](https://tailwindcss.com/docs/upgrade-guide#using-a-javascript-config-file).
+Tailwind được tích hợp trực tiếp bằng [plugin Vite chính thức](https://tailwindcss.com/docs/installation/using-vite), và nạp animation từ `tailwind.config.js` qua `@config`. Không cần cấu hình PostCSS riêng.

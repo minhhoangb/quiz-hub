@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import subjects from '../src/data/subjects.js';
 import { createSession, finishSession, recordAnswer, resumeSession, shuffle } from '../src/lib/session.js';
-import { addWrong, getWrongIds, hasActiveSession, initialState, readAll, removeWrong, writeAll } from '../src/lib/storage.js';
+import { addWrong, getWrongCount, getWrongIds, hasActiveSession, initialState, readAll, removeWrong, writeAll } from '../src/lib/storage.js';
 
 test('shuffle preserves input and produces a permutation, including edge cases', () => {
   const ids = [1, 2, 3, 4];
@@ -58,9 +58,37 @@ test('wrong pools are deduplicated, isolated by subject and removable', () => {
   state = addWrong('ml', 1, state);
   state = addWrong('network', 1, state);
   assert.deepEqual(getWrongIds('ml', state), [1]);
+  assert.equal(getWrongCount('ml', 1, state), 2);
+  assert.equal(getWrongCount('network', 1, state), 1);
+  assert.equal(getWrongCount('ml', 2, state), 0);
   state = removeWrong('ml', 1, state);
   assert.deepEqual(getWrongIds('ml', state), []);
   assert.deepEqual(getWrongIds('network', state), [1]);
+  assert.equal(getWrongCount('ml', 1, state), 2);
+  state = addWrong('ml', 1, state);
+  assert.equal(getWrongCount('ml', 1, state), 3);
+});
+
+test('wrong counts survive reload and migrate old wrong pools without losing progress', () => {
+  const saved = new Map();
+  globalThis.window = { localStorage: { getItem: key => saved.get(key) ?? null, setItem: (key, value) => saved.set(key, value) } };
+  try {
+    const legacy = { ...structuredClone(initialState), wrong: { mds: [1] }, answeredIds: { mds: [1, 2] } };
+    delete legacy.wrongCounts;
+    assert.equal(writeAll(legacy), true);
+    const restored = readAll();
+    assert.equal(getWrongCount('mds', 1, restored), 1);
+    assert.deepEqual(restored.answeredIds, legacy.answeredIds);
+    addWrong('mds', 1);
+    addWrong('mds', 1);
+    assert.equal(getWrongCount('mds', 1, readAll()), 3);
+    assert.deepEqual(getWrongIds('mds', readAll()), [1]);
+    removeWrong('mds', 1);
+    assert.equal(getWrongCount('mds', 1, readAll()), 3);
+    assert.deepEqual(getWrongIds('mds', readAll()), []);
+    saved.set('quiz_practice_v1', JSON.stringify({ wrong: { mds: [1, 2] }, wrongCounts: { mds: { 1: -3, 2: 4, 3: '5', 4: 1.5 }, dhv: null } }));
+    assert.deepEqual(readAll().wrongCounts, { mds: { 1: 1, 2: 4 }, dhv: {} });
+  } finally { delete globalThis.window; }
 });
 
 test('storage is safe without window and recovers malformed JSON', () => {

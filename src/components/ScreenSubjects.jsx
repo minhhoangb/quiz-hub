@@ -1,6 +1,8 @@
 import { ArrowRight, BookOpen, Brain, CheckCheck, CircleHelp, FileJson, ChartNoAxesCombined, Layers, Play, Sparkles, Target, Trash2, Trophy } from 'lucide-react';
 import { Progress, StudyArt } from './UI.jsx';
 
+const formatCount = count => count === 0 ? '0' : String(count).padStart(2, '0');
+
 export default function ScreenSubjects({ subjects, banks, state, onSetup, onResume, onReview, onHide, onQuestions, view }) {
   const answered = subjects.reduce((sum, subject) => sum + (state.answeredIds[subject.id] ?? []).filter(id => banks[subject.id].some(q => q.id === id)).length, 0);
   const wrongCount = subjects.reduce((sum, subject) => sum + (state.wrong[subject.id]?.length ?? 0), 0);
@@ -18,8 +20,8 @@ export default function ScreenSubjects({ subjects, banks, state, onSetup, onResu
     {view !== 'stats' && <section className="hero-panel"><div className="hero-copy"><span className="hero-pill"><span />MỘT CHÚT TẬP TRUNG, MỘT BƯỚC TIẾN</span><h2>Kiến thức lớn.<br />Bắt đầu từ <span>câu hỏi nhỏ.</span></h2><p>Không cần học hết trong một ngày. Luyện tập vừa sức,<br className="desktop-break" /> hiểu từng đáp án và để Quiz Hub nhớ tiến độ giúp bạn.</p><a className="button primary" href="#subjects">Khám phá môn học<ArrowRight size={17} /></a><div className="hero-foot"><CheckCheck size={16} /> Tự động lưu <span>·</span> Không áp lực thời gian</div></div><StudyArt /></section>}
     <section className="stat-grid" aria-label="Tổng quan học tập">
       <div className="stat-item"><span className="stat-icon"><BookOpen size={21} /></span><div><span>Môn học sẵn sàng</span><strong>{subjects.length.toString().padStart(2, '0')}<small>môn học</small></strong></div></div>
-      <div className="stat-item"><span className="stat-icon"><CheckCheck size={21} /></span><div><span>Câu hỏi đã khám phá</span><strong>{answered.toString().padStart(2, '0')}<small>/ {total} câu hỏi</small></strong></div></div>
-      <div className="stat-item"><span className="stat-icon amber"><Layers size={21} /></span><div><span>Cần ôn tập thêm</span><strong>{wrongCount.toString().padStart(2, '0')}<small>câu hỏi</small></strong></div></div>
+      <div className="stat-item"><span className="stat-icon"><CheckCheck size={21} /></span><div><span>Câu hỏi đã khám phá</span><strong className="stat-fraction">{formatCount(answered)}/{total}</strong></div></div>
+      <div className="stat-item"><span className="stat-icon amber"><Layers size={21} /></span><div><span>Cần ôn tập thêm</span><strong>{formatCount(wrongCount)}</strong></div></div>
     </section>
     <section id="subjects" className="subjects-section"><div className="section-heading"><div><h2>{view === 'stats' ? 'Kết quả theo môn học' : reviewOnly ? 'Bộ thẻ ôn tập của bạn' : 'Hôm nay bạn muốn học gì?'}</h2><p>{view === 'stats' ? `${done} phiên hoàn thành · ${totalAnswered ? Math.round(totalCorrect / totalAnswered * 100) : 0}% trả lời đúng trong các phiên đã hoàn thành` : reviewOnly ? 'Chọn một bộ thẻ để ôn lại những câu trả lời sai.' : 'Một phiên học nhỏ, thêm một điều mới.'}</p></div><span className="count-tag">{subjects.length} môn học</span></div>
     {!subjects.length && <div className="work-card cleared-state" role="status"><h3>Chưa có môn học hiển thị</h3><p>Các môn đã được xóa tạm. Nội dung và tiến độ học vẫn được giữ.</p></div>}<div className="subject-grid">{subjects.map((subject, index) => {
